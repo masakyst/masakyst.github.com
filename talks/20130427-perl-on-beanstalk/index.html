@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
+    <link href="css/impress.css" rel="stylesheet" />
+</head>
+<body>
+<div id="impress" class="impress-not-supported">
+    <div class="fallback-message">
+        <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+        <p>For the best experience please use the latest <b>Chrome</b> or <b>Safari</b> browser. Firefox 10 (to be released soon) will also handle it.</p>
+    </div>
+
+<div id="title" class="step" data-y="0" data-x="0">
+<h1>Perl on Elastic Beanstalk</h1>
+
+<h3>カジュアル編</h3>
+
+<p>　</p>
+
+<p>2013/04/27 さいとう まさあき( masakyst )</p>
+
+</div>
+<div class="step" data-y="0" data-x="1200">
+<h2>自己紹介</h2>
+
+<p><img src="http://a1.twimg.com/profile_images/1349994490/masakyst.jpeg" height="100" /></p>
+
+<ul>
+<li>斉藤 雅昭(さいとう まさあき) </li>
+<li>Twitter @masakyst</li>
+<li>沖縄 読谷村</li>
+<li>Perl, JavaScriptが好き</li>
+<li>CBR250R乗り(ツーリング行きたい..!!</li>
+</ul>
+
+</div>
+<div class="step" data-y="0" data-x="2400">
+<h2>Q</h2>
+
+<h2>Perl使ってる人</h2>
+
+</div>
+<div class="step" data-y="0" data-x="3600">
+<h2>さて、カジュアルにWebアプリを作りたいんだけど...</h2>
+
+<ul>
+<li>サーバの環境構築がめんどくさい</li>
+<li>コードを配置するだけでアプリの公開したい</li>
+</ul>
+
+</div>
+<div class="step" data-y="0" data-x="4800">
+<h2>それPHPで...!</h2>
+
+<p>もう共用サーバ上でPHPをFTPアップロードで...</p>
+
+</div>
+<div class="step" data-y="800" data-x="0">
+<h2>AWSにはElastic Beanstalkがある!!!</h2>
+
+<p>Elastic Beanstalkとは、各言語向けのセットアップ済み実行環境で、
+その他、いい感じに自動で色々とやってくれます</p>
+
+<p>　</p>
+
+<ul>
+<li>アプリ実行環境の用意</li>
+<li>アプリ状態モニタリング</li>
+<li>アプリ配置時の処理</li>
+<li>容量のプロビジョニング</li>
+<li>負荷分散</li>
+<li>アプリの配置はgitでpushするだけでいい</li>
+</ul>
+
+<p>などなど</p>
+
+</div>
+<div class="step" data-y="800" data-x="1200">
+<h2>Elastic Beanstalk対応言語</h2>
+
+<ul>
+<li>Java</li>
+<li>.NET</li>
+<li>Ruby</li>
+<li>Python</li>
+<li>PHP</li>
+<li>Node.js</li>
+</ul>
+
+</div>
+<div class="step" data-y="800" data-x="2400">
+<h2>＿人人人人人人人人人人＿ <br> ＞　Perlないじゃん！　＜ <br> ￣Y^Y^Y^Y^Y^Y^Y^Y^Y￣   <br></h2>
+
+</div>
+<div class="step" data-y="800" data-x="3600">
+<h2>YAPC::Asia 2012にて</h2>
+
+<p>AWSの中の人が、カスタムAMIでPSGI hello worldしてた</p>
+
+<p>http://yapcasia.org/2012/talk/show/d08441ca-0803-11e2-8333-15646aeab6a4</p>
+
+<p>　  </p>
+
+<p>カスタムAMIでConfiguration templateをいじってAMIを入れ替える...AWSカジュアルユーザーには敷居が高い</p>
+
+</div>
+<div class="step" data-y="800" data-x="4800">
+<h2>Hookがある!</h2>
+
+<p>beanstalkには、hookという機構がある</p>
+
+<p>環境の作成、アプリの配置、などいくつかのタイミングで、
+行いたい処理を追加できます。</p>
+
+<p>　</p>
+
+<p>例えば...、</p>
+
+<ul>
+<li>アプリ配置前に、yumなどでパッケージをインストール</li>
+<li>アプリ配置時に、指定worker数でサーバを立ち上げる</li>
+</ul>
+
+<p>などなど</p>
+
+</div>
+<div class="step" data-y="1600" data-x="0">
+<h2>Perl on Elastic Beanstalk</h2>
+
+<p>このHookを使って、Perl/Mojolicious製WebアプリをBeanstalkに載せて
+カジュアルにアプリを作っていこう！！</p>
+
+</div>
+<div class="step" data-y="1600" data-x="1200">
+<h2>Mojoliciousとは</h2>
+
+<p>http://mojolicio.us/
+「real-time web framework」</p>
+
+<p>Modern Perl(現代的な書き方やノウハウのPerl)を代表する、Webアプリフレームワークの1つ</p>
+
+<p>　</p>
+
+<ul>
+<li>インストールが簡単(依存ライブラリが無い)</li>
+<li>プラグインで機能を拡張できる</li>
+<li>非同期IO、HTTP 1.1、組み込みWebSocket対応サーバ付属</li>
+<li>JSON、HTML/XMLパーサ、CSSセレクタをサポート</li>
+</ul>
+
+</div>
+<div class="step" data-y="1600" data-x="2400">
+<h2>Demo</h2>
+
+<p>Elastic Beanstalk上で、Mojoliciousアプリを動かしてみる</p>
+
+<p>　　</p>
+
+<ul>
+<li>gitを使う</li>
+<li>AWS Elastic Beanstalk Command Line Toolを使う</li>
+</ul>
+
+<p><a href="http://aws.amazon.com/code/6752709412171743" target="_blank">※1</a></p>
+
+</div>
+<div class="step" data-y="1600" data-x="3600">
+<h2>まとめ</h2>
+
+<ul>
+<li>Hookを使えば、わりと何にでも応用できそう</li>
+<li>Beanstalkはコードを書くのに専念できる(Beta!</li>
+<li>(Modern) Perlは良い！！</li>
+</ul>
+
+</div>
+<div class="step" data-y="1600" data-x="4800">
+<h2>Perl勉強会はじめました!</h2>
+
+<p>　</p>
+
+<h3>Yomitan.pm #1スタート...!!</h3>
+
+<p>http://yomitanpm.org/</p>
+
+<p>http://atnd.org/events/39173</p>
+
+<p>　</p>
+
+<h3>北谷のクリエイターズレジデンスにて!!</h3>
+
+<p>http://summer-time-studio.com/CreatorsResidence/index.html</p>
+
+</div>
+<div class="step" data-y="2400" data-x="0">
+<h2>YAPC::Asia 2013</h2>
+
+<p>http://yapcasia.org/2013/</p>
+
+<p>エンジニアのエンジニアによるエンジニアのためのお祭り!!</p>
+
+<p>国内外の(Perl)ハッカーが集結!!</p>
+
+<p><br></p>
+
+<p>9/19(木) ... 前夜祭</p>
+
+<p>9/20(金) ... 一日目</p>
+
+<p>9/21(土) ... 二日目</p>
+
+<p>　</p>
+
+<p>LCC(格安航空会社)使えば安い！</p>
+
+<p>※僕はYAPCの実行委員でもなんでもありません！！</p>
+
+</div>
+<div class="step" data-y="2400" data-x="1200">
+<h2>ご清聴</h2>
+
+<h2>ありがとうございました</h2>
+
+</div>
+
+
+    <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10">
+    </div>
+
+</div>
+
+<div class="hint">
+    <p>Use a spacebar or arrow keys to navigate</p>
+</div>
+<script>
+if ("ontouchstart" in document.documentElement) { 
+    document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+}
+</script>
+<script src="js/impress.js"></script>
+
+</body>
+</html>
+
