@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="http://kevinburke.bitbucket.org/markdowncss/markdown.css" rel="stylesheet"></link>
+<style type="text/css">
+/* override */
+p, ul, ol {
+    font-size: 16px;
+    line-height: 24px;
+    max-width: 800px;
+}
+</style>
+<title>title</title>
+</head>
+<body>
+<h1>Chapter01 -- Perlをはじめよう</h1>
+
+<h2>01-01 Perlのセットアップ</h2>
+
+<h3>01-01-01 複数バージョンのPerlを使用</h3>
+
+<p>OSで標準で入っているPerl(system perl)は、いくつかのツールから依存しているケースもあり、
+  アプリケーションを多数ホストするのは、適切でない場合があります。
+  開発で利用するPerlインタプリターは、開発用に独立していた方がよいところです。
+  また、複数のバージョンで動作を確認出来る事も望ましいですね。
+  そこで、ここでは<strong>plenv</strong>を使い、Perlインタプリターを1つのOS内に複数のバージョンをインストールし、管理してみます。</p>
+
+<p>plenvをインストールにはいくつかの方法があります</p>
+
+<p>CPANからの場合</p>
+
+<blockquote>
+  <p>$ sudo /usr/bin/perl -MCPAN -e shell <br />
+    install App::plenv  </p>
+</blockquote>
+
+<p>homebrewからの場合</p>
+
+<blockquote>
+  <p>$ brew install plenv</p>
+</blockquote>
+
+<p>githubからの場合(plenv開発速いし、githubから入れるのがベスト)</p>
+
+<blockquote>
+  <p>$ git clone git://github.com/tokuhirom/plenv.git ~/.plenv</p>
+</blockquote>
+
+<p>plenvのインストールが完了したら、いくつかshell(bashの例)に設定します</p>
+
+<blockquote>
+  <p>$ echo 'export PATH="$HOME/.plenv/bin:$PATH"' >> ~/.bash_profile <br />
+    $ echo 'eval "$(plenv init -)"' >> ~/.bash_profile <br />
+    $ exec $SHELL -l  </p>
+</blockquote>
+
+<p>インストール可能なPerlバージョンの表示</p>
+
+<blockquote>
+  <p>$ plenv available  </p>
+</blockquote>
+
+<p>Perl 5.16.3をインストール</p>
+
+<blockquote>
+  <p>$ plenv install 5.16.3 </p>
+</blockquote>
+
+<p>通常 ~/.plenv/versions/5.16.3 にインタプリターがインストールされます。 <br />
+  しかもデフォルトではPerlソースに付属しているtestが走りません <br />
+  テスト(make test)を実行したい場合は、--test オプションを追加する</p>
+
+<p>インストールしたPerlインタプリタを削除したい場合は？</p>
+
+<p>~/.plenv/versions以下のperlバージョンをごっそり削除するだけでいいみたいです</p>
+
+<p>globalなインタプリタを指定</p>
+
+<blockquote>
+  <p>$ plenv global 5.16.3</p>
+</blockquote>
+
+<p>localなインタプリタを指定（あるディレクトリで実行した場合）</p>
+
+<blockquote>
+  <p>$ plenv local 5.14.3 <br />
+    $ ls <br />
+    .perl-version  </p>
+</blockquote>
+
+<p>localの場合は、<strong>.perl-version</strong>ファイルがそのディレクトリにできています。
+  この中に、指定したPerlのバージョンが記載されています。
+  localしたディレクトリで、perl -v して見てください。</p>
+
+<p>少し進んだ使い方</p>
+
+<p>asオプションで複数の同バージョンを別名で入れたい時やビルドオプションを変えたい時に使えます</p>
+
+<blockquote>
+  <p>$ plenv install 5.16.3 -Dusethreads --as=perl516i</p>
+</blockquote>
+
+<p>ithreadsはplenvでインストールした時も通常では入りません。
+  インタプリタのビルド時に、ビルドオプションを渡しましょう(-Dusethreads) <br />
+  ithreadsについては、2009年の記事ですが、tokuhiromさんの記事が有用かと思います。
+  http://blog.64p.org/entry/20090629/1246239835</p>
+
+<p>インストールしたモジュールの移動
+  plenvを使えば, 異なるバージョンのperl間でモジュールを移動することができます。
+  例えば, あるプロダクトの開発環境をperl-5.14.4から新しくインストールしたperl-5.16.3に変更するような場合
+  下記の要領で、5.16.3側にモジュールを移行できるようです。</p>
+
+<blockquote>
+  <p>$ plenv migrate-modules 5.14.4 5.16.3</p>
+</blockquote>
+
+<p>asオプションを使い、定期的にアップデートする</p>
+
+<p>asオプションを使って、インストールする時に、マイナーバージョンを含めないように名前付けします。
+  (例: あえて、低いマイナーバージョンをインストール)
+  (--as=perl-5.16とか-含めると使えない</p>
+
+<blockquote>
+  <p>$ plenv install 5.16.1 --as=perl516</p>
+</blockquote>
+
+<p>マイナーバージョンをアップグレード(バイナリ互換あり)</p>
+
+<blockquote>
+  <p>$ plenv install 5.16.3 --as=perl516 --force</p>
+</blockquote>
+
+<p>plenv 1.5.0からの追加機能(2013-05-17 released!)</p>
+
+<p>plenv install -j 4 5.18.0-RC4 -DDEBUGGING=-g がオススメです。 <br />
+  plenv install 5.18.0-RC4 -DDEBUGGING=-g -j 4 か <br />
+  ~/.plenv/build/ が build directory になった</p>
+
+<p>なお、plenv関係の記事は、plenv作者tokuhiromさんと、papixさんの記事が大変有用です。 <br />
+  http://blog.64p.org/entry/2013/01/23/081834 <br />
+  http://blog.papix.net/entry/2013/01/21/210327  </p>
+
+<h3>01-01-02 cpanmでライブラリを管理</h3>
+
+<p>Perlには、標準でCPANモジュールを管理するcpanコマンドが付属していますが、
+  CPANに加え、githubからのインストールや、バージョン指定インストール、など
+  便利な機能が満載でかつ使いやすい <strong>cpanm(App::cpanminus)</strong> をインストールしてライブラリを管理します。</p>
+
+<p>cpanmをplenvからインストール</p>
+
+<blockquote>
+  <p>$ plenv install-cpanm </p>
+</blockquote>
+
+<p>cpanm自体が古くなるなど、アップグレードしたい場合</p>
+
+<blockquote>
+  <p>$ cpanm --self-upgrade</p>
+</blockquote>
+
+<p>cpanmでモジュールをバージョン指定してインストールするなども可能です <br />
+  ( モジュール名@バージョン番号を指定する 例)</p>
+
+<blockquote>
+  <p>$ cpanm Mojolicious@3.95</p>
+</blockquote>
+
+<p>その他、cpanmの詳しい使い方は、perldoc cpanm して、ドキュメントを見てみてください。</p>
+
+<p><strong>下記rehashは、plenv-v1.4.0以降から不要になりました</strong> <br />
+  何かcpanm経由でインストールした時には、rehashして状態を認識させる必要があります。
+  そうでないと、インストールしたモジュールのコマンドなどが反映されないので多少注意が必要です。 </p>
+
+<blockquote>
+  <p>$ plenv rehash</p>
+</blockquote>
+
+<h3>01-01-03 cpanfileでのモジュール依存管理</h3>
+
+<p>CPANモジュールを複数インストールしたい時など、cpanfileというファイルで管理すると大変楽になります。
+  cpanfileでは、モジュール名と、バージョンを記述します。</p>
+
+<blockquote>
+  <p>requires 'Mojolicious', '== 3.95'; <br />
+    requires 'Proclet', '0';</p>
+</blockquote>
+
+<p>指定したモジュールを、cpanmでインタプリターglobalにインストールします。</p>
+
+<blockquote>
+  <p>$ cpanm --installdeps .  </p>
+</blockquote>
+
+<p>cpanfileのモジュールバージョンは、下記の様な指定ができます。</p>
+
+<p>'0'       指定無し <br />
+  '1.00'    以上 <br />
+  '== 1.00' 固定 <br />
+  '!= 1.00' 以外 <br />
+  '>= 1.00' 以上 <br />
+  '&lt;= 1.00' 以下 <br />
+  '> 1.00'  超過 <br />
+  '&lt; 1.00'  未満  </p>
+
+<p>cpanfileについては、下記の記事が有用です。 <br />
+  http://www.slideshare.net/aloelight/cpanfile</p>
+
+<h3>01-01-04 Cartonでライブラリのインストールをクリーンにする</h3>
+
+<p>参考
+  http://blog.livedoor.jp/lestrrat-practical_modern_perl/archives/25002846.html</p>
+
+<p>今までのcpanmでのモジュールインストールは、Perlインタプリターのglobal領域(site_perl)
+  にインストールするものでした。
+  しかし、Perlアプリケーションを多く作って行くようになると、同じモジュールを利用していても、
+  個々のアプリケーションで使用するバージョンを変えたい、などのケース出てきます。
+  その様な場合、<strong>Carton</strong>を使い、Perlインタプリターglobalではなく、アプリケーションlocalにモジュールを
+  インストールすることで対応する事ができます。</p>
+
+<p>Cartonをインストール</p>
+
+<blockquote>
+  <p>$ cpanm Carton</p>
+</blockquote>
+
+<p>次に、インストールしたいモジュールをcpanfileを用いて作成します。</p>
+
+<blockquote>
+  <p>$ cat cpanfile <br />
+    requires 'Mojolicious', '== 3.95';</p>
+
+  <p>$ carton install <br />
+    Successfully installed Mojolicious-3.95
+    1 distribution installed
+    Complete! Modules were installed into local</p>
+</blockquote>
+
+<p>となり、local/以下に実行コマンド含め、モジュール全てがインストールされます。
+  また、carton.lockというファイル, .cartonディレクトリも作成されます。
+  cpanfileとcarton.lockはバージョン管理ツールで管理するようにします。</p>
+
+<blockquote>
+  <p>$ git add cpanfile carton.lock</p>
+</blockquote>
+
+<p>carton経由でMojoliciousを起動してみます</p>
+
+<blockquote>
+  <p>$ carton exec -- morbo myapp.pl</p>
+</blockquote>
+
+<p>localで動作確認できましたね！
+  では、これらをバージョン管理に追加し、pushします。その後デプロイしてみましょう。</p>
+
+<blockquote>
+  <p>$ git clone mojotest <br />
+    $ cd mojotest <br />
+    $ carton install <br />
+    Installing modules using carton.lock (deployment mode) <br />
+    Successfully installed Mojolicious-3.95 <br />
+    1 distribution installed <br />
+    Complete! Modules were installed into local  </p>
+</blockquote>
+
+<p>この様にCartonは、開発時cpanfileからインストールを行い、デプロイ時はcarton.lockからインストールを行います。</p>
+
+<p>依存モジュールをネットワークからインストールするのではなく、あらかじめバンドルしておく事もできます。
+  carton bundle</p>
+
+<p>http://blog.64p.org/entry/2013/02/07/113231</p>
+
+<blockquote>
+  <p>$ carton bundle <br />
+    Bundling modules using cpanfile <br />
+    Mojolicious-3.95 <br />
+    Complete! Modules were bundled into /Users/masakyst/tmp/perl/cart/local/cache  </p>
+</blockquote>
+
+<p>すると、local/cacheにtarをぶっ込んでくれる
+  git add local/cache
+  しておく</p>
+
+<p>デプロイ時には、</p>
+
+<blockquote>
+  <p>$ carton install --cached</p>
+</blockquote>
+
+<p>すると、ちゃんとlocal/cacheからインストールされているのがわかる <br />
+  tail -f ~/.cpanm/build.log
+  Working on Mojolicious
+  Fetching file:///</p>
+
+<h2>01-02 Gitのセットアップ</h2>
+
+<p>不要かな</p>
+
+<h2>01-03 エディタと開発に便利なツール</h2>
+
+<h3>01-03-01 ソースコードの検索にはack</h3>
+
+<p>ackというPerl製のソースコードの検索ツールがあります。(find, grepのような)</p>
+
+<p>ackのインストール</p>
+
+<blockquote>
+  <p>$ cpanm App::Ack</p>
+</blockquote>
+
+<p>ack2.0のメジャーバージョンアップで,1系と変わった箇所もあるので、良く確認したほうがよさそうです。</p>
+
+<h3>01-03-02 vim/emacs/sublime text2</h3>
+
+<p>ろくにvim pluginも使ってないし、sublime textも使ってない状態</p>
+
+<h3>01-03-03 インタラクティブモード</h3>
+
+<p>Perlにも、Rubyのirbの様なインタファクティブシェルがいくつかあります。</p>
+
+<ul>
+<li>perldebugger(標準)</li>
+<li>perlsh(Term::ReadLine::Gnu)  一昔前の定番だが安定している</li>
+<li>re.pl(Devel::REPL) use Mooseしているのが気にならなければ</li>
+<li>pirl(Shell::Perl) 複数行入力できないので微妙</li>
+<li><p>iperl(App::REPL) ベストと思いきや、評価順序に難あり？</p>
+
+<p>などがありあます。
+個人的におすすめなのは、標準のperldebuggerです。</p>
+
+<blockquote>
+  <p>$ perl -de 1</p>
+</blockquote>
+
+<p>とすると、対話的にPerlコードが実行できます。
+.bashrcなどにaliasしておくと、それなりにいい感じになります。</p>
+
+<blockquote>
+  <p>alias ipl='rlwrap perl -de 1' </p>
+</blockquote></li>
+</ul>
+
+<h3>01-03-04 perltidyでソースコードを奇麗に統一</h3>
+
+<p>http://perl-users.jp/articles/advent-calendar/2009/casual/09.html</p>
+
+<p>perl hacksかperl bestpracticeにも書いてある</p>
+
+<h3>01-03-05 Padre IDE</h3>
+
+<p>Perl製のPerl専用IDEがあります。</p>
+
+<p>詳しくは、charsbarさんの記事が良いです。
+  http://gihyo.jp/dev/serial/01/modern-perl/0017</p>
+
+<p>cpanm Padre</p>
+
+<p>Padre requires a perl built using threads!!!!!!(-Dusethreadsしないとだめ</p>
+
+<p>! Installing the dependencies failed: Module 'Debug::Client' is not installed
+! Bailing out the installation for Padre-0.98. Retry with --prompt or --force.
+105 distributions installed</p>
+
+<p>という事で、Debug::Clientがmacだと0.25はいらない
+  最近良くアップデートされている</p>
+
+</body>
+</html>
