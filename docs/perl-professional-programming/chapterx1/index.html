@@ -81,6 +81,24 @@ CloudForecastを使って進めていきます。</p>
 
 <p>cloudforecast.yamlは全体の設定、server_list.yamlは監視対象のサーバの設定です。</p>
 
+<p>myfinderさんのはてなブログ</p>
+
+<p>UCD-DISKIO-MIB::diskIOTable とかを取りたいのに UCD-SNMP-MIB::ucdExperimental と出てしまい取れなくて生きるのがつらいとき</p>
+
+<p>http://myfinder.hatenablog.com/entry/2013/05/19/160608</p>
+
+<p>net-snmpをソースからビルド</p>
+
+<blockquote>
+  <p>$ wget http://sourceforge.net/projects/net-snmp/files/net-snmp/5.7.2/net-snmp-5.7.2.tar.gz/download</p>
+</blockquote>
+
+<p>ビルドオプション</p>
+
+<blockquote>
+  <p>$ ./configure --with-perl-modules --with-mib-modules="ucd-snmp/diskio" --with-default-snmp-version="3" --with-sys-contact="@localdomain" --with-sys-location="Unknown" --with-logfile="/var/log/snmpd.log" --with-persistent-directory="/var/net-snmp"</p>
+</blockquote>
+
 <h3>01-01-02 SNMPの設定</h3>
 
 <p>SNMPとは、DARPAモデルに準じたIP ネットワーク上のネットワーク機器を監視（モニタリング）・制御するための情報の通信方法を定めるプロトコルです。(Wikipedia抜粋)</p>
