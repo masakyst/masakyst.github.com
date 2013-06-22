@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="http://kevinburke.bitbucket.org/markdowncss/markdown.css" rel="stylesheet"></link>
+<style type="text/css">
+/* override */
+p, ul, ol {
+    font-size: 16px;
+    line-height: 24px;
+    max-width: 800px;
+}
+blockquote {
+    max-width: 800px;
+}
+blockquote p {
+    max-width: 800px;
+}
+</style>
+<title>title</title>
+</head>
+<body>
+<h1>ChapterX1 -- Perlによるサーバ監視</h1>
+
+<h2>01-01 リソース監視</h2>
+
+<p>ある程度サービスを運用していくにあたって、サーバのリソースの把握/監視ができると
+システムのチューニングやサーバの増強のタイミングを把握する事が可能になります。</p>
+
+<p>リソース監視ツールは多々ありますが、ここではPerl製のリソース監視ツール
+CloudForecastを使って進めていきます。</p>
+
+<h3>01-01-01 Cloudforecastのインストール</h3>
+
+<p>最低限、system perlに必要なライブラリをインストールしておきます。</p>
+
+<p>(以下、CentOS6での例)</p>
+
+<blockquote>
+  <p>$ yum install -y net-snmp net-snmp-utils net-snmp-devel net-snmp-perl rrdtool-perl perl-core perl-CGI</p>
+</blockquote>
+
+<p>cloudforecastのソースをgithubから取得します。</p>
+
+<blockquote>
+  <p>$ git clone https://github.com/kazeburo/cloudforecast.git <br />
+    cd cloudforecast</p>
+</blockquote>
+
+<p>CloudForecastの追加モジュールインストールを局所的に行うため、cpanmをインストールします</p>
+
+<blockquote>
+  <p>$ wget --no-check-certificate http://cpanmin.us <br />
+    chmod +x ./cpanm</p>
+</blockquote>
+
+<p>CloudForecast依存モジュールではありませんが、有ると便利なモジュールを入れておきます。</p>
+
+<blockquote>
+  <p>$ ./cpanm -n -l extlib JSON::XS Proclet File::RotateLogs</p>
+</blockquote>
+
+<p>CloudForecastの依存モジュールをインストールします。</p>
+
+<blockquote>
+  <p>$ ./cpanm -n -l extlib --installdeps .</p>
+</blockquote>
+
+<p>データ保存ディレクトリ、ログ保存ディレクトリを作成します。</p>
+
+<blockquote>
+  <p>$ mkdir -p data logs</p>
+</blockquote>
+
+<p>設定ファイルをrenameして、サーバ環境に合わせ書き換えます。</p>
+
+<blockquote>
+  <p>$ mv cloudforecast_sample.yaml cloudforecast.yaml <br />
+    mv server_list_sample.yaml server_list.yaml</p>
+</blockquote>
+
+<p>cloudforecast.yamlは全体の設定、server_list.yamlは監視対象のサーバの設定です。</p>
+
+<h3>01-01-02 SNMPの設定</h3>
+
+<p>SNMPとは、DARPAモデルに準じたIP ネットワーク上のネットワーク機器を監視（モニタリング）・制御するための情報の通信方法を定めるプロトコルです。(Wikipedia抜粋)</p>
+
+<p>Cloudforecastは、基本的な部分は、SNMPを経由して監視対象の状態を取得しています。
+その為、Cloudforecast側(マネージャ)と、監視対象側(エージェント)にSNMPの設定を正しく行う必要があります。</p>
+
+<p>ここでは、CloudForecastをインストールしたマネージャ兼エージェント（自分を監視）として設定してみます。</p>
+
+<p>SNMPのconfファイルを書き換えます。</p>
+
+<p>/etc/snmp/snmpd.conf</p>
+
+<blockquote>
+  <p>com2sec local localhost public <br />
+  group local_grp v2c local <br />
+  view    all    included   .1   80 <br />
+  access local_grp "" any noauth exact all none none <br />
+  syslocation Unknown (edit /etc/snmp/snmpd.conf) <br />
+  syscontact Root <root@localhost> (configure /etc/snmp/snmp.local.conf) <br />
+  dontLogTCPWrappersConnects yes <br />
+  disk / 10000  </p>
+</blockquote>
+
+<p>デフォルトのsnmpd.confはコメントも多く見づらいので、こんな感じに最小限に書き換えてしまいます。</p>
+
+<p>(要つっこみ！！)</p>
+
+<p>SNMPDを再起動します。</p>
+
+<blockquote>
+  <p>$ service snmpd restart</p>
+</blockquote>
+
+<p>snmpwalkを使用して、データが取得できるか確認してみます。</p>
+
+<blockquote>
+  <p>$ snmpwalk -c public -v 2c localhost</p>
+</blockquote>
+
+<p>ずらーっとデータが表示されれば大体成功です</p>
+
+<h3>01-01-03 CloudForecastの起動</h3>
+
+<p>CloudForecastはシンプルな構成で、データ取得用巡回デーモンと、グラフ閲覧HTTPDを2つ走らせる必要があります。</p>
+
+<p>データ取得用巡回デーモンの起動</p>
+
+<blockquote>
+  <p>$ CF_DEBUG=1 ./cloudforecast_radar -c cloudforecast.yaml -l server_list.yaml  </p>
+</blockquote>
+
+<p>グラフ閲覧HTTPDの起動</p>
+
+<blockquote>
+  <p>$ CF_DEBUG=1 ./cloudforecast_web -p 5000 -c cloudforecast.yaml -l server_list.yaml</p>
+</blockquote>
+
+<p>CF_DEBUG=1 を付けると、詳細なデバッグログで表示されます。
+必要に付き、付けてみると便利です。</p>
+
+<p>巡回デーモンは、起動後5分感覚で監視対象エージェントにデータを取得しにいきます。
+グラフ閲覧HTTPDをポート5000番で起ち上げていますので、ブラウザからCloudForecastにアクセスできるようになっています。
+グラフデータが表示されるようになるまで しばらく待ってみましょう。</p>
+
+<h2>01-02 死活監視</h2>
+
+<p>CloudForecastでは、死活監視を行い、監視対象がダウンした時に通知するという機能は今のところ無いようです。
+そこで、ここではPerl製のシンプルな死活監視用ツール App::MadEyeを使い、簡単に死活監視を行ってみます。</p>
+
+<h2>01-03 閾値アラート</h2>
+
+<p>Amazon CloudWatchを使う</p>
+
+</body>
+</html>
