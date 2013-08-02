@@ -1,0 +1,249 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic" rel="stylesheet" />
+    <link href="css/impress.css" rel="stylesheet" />
+</head>
+<body>
+<div id="impress" class="impress-not-supported">
+    <div class="fallback-message">
+        <p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+        <p>For the best experience please use the latest <b>Chrome</b> or <b>Safari</b> browser. Firefox 10 (to be released soon) will also handle it.</p>
+    </div>
+
+<div id="title" class="step" data-y="0" data-x="0">
+<h1>Cloudforecast Biginners</h1>
+
+<p><br></p>
+
+<p>2013/04/27 さいとう まさあき( masakyst )</p>
+
+<p>Yomitan.pm</p>
+
+</div>
+<div class="step" data-y="0" data-x="1200">
+<h2>自己紹介</h2>
+
+<p><img src="https://si0.twimg.com/profile_images/3692908699/35e204405d9c88a8a5c9dc16567ab8eb.jpeg" height="100" /></p>
+
+<ul>
+<li>斉藤 雅昭(さいとう まさあき) </li>
+<li>Twitter @masakyst</li>
+<li>沖縄 読谷村</li>
+<li>Perl, JavaScriptが好き</li>
+<li>フルスタックエンジニア</li>
+</ul>
+
+</div>
+<div class="step" data-y="0" data-x="2400">
+<h2>Cloudforecastとは</h2>
+
+<p>サーバ等のリソース監視をするためのツールです。
+RRDToolの薄いラッパー、情報取得のためのフレームワークとして設計されています。
+CloudForecastは、4つのプロセスによって動作します。</p>
+
+<p><br></p>
+
+<ul>
+<li>巡回デーモン</li>
+<li>グラフ閲覧 HTTPD</li>
+<li>情報取得Gearmanワーカー</li>
+<li>RRDファイル更新Gearmanワーカー</li>
+</ul>
+
+<p><br></p>
+
+<p>小規模な監視では、Gearmanがなくても動作可能です。</p>
+
+<p>(READMEから抜粋)</p>
+
+</div>
+<div class="step" data-y="0" data-x="3600">
+<h2>便利なこと</h2>
+
+<p><br></p>
+
+<ul>
+<li>例えばApacheやMySQLを入れなくても動く(PSGIベース</li>
+<li>system perl + cpanmでさくっと動く</li>
+<li>サーバ台数が増えてもGearmonで大量にさばける</li>
+<li>Perl製!!(ソース勉強,改変しやすい </li>
+</ul>
+
+<p><br></p>
+
+<p>自分が使っている言語で安心して使えるというのは大事...!!</p>
+
+</div>
+<div class="step" data-y="0" data-x="4800">
+<h2>できないこと</h2>
+
+<p>cloudforecastはリソースのグラフ化中心で</p>
+
+<p><br></p>
+
+<ul>
+<li>死活監視</li>
+<li>閾値でのアラート</li>
+</ul>
+
+<p><br></p>
+
+<p>などは現在できません。</p>
+
+</div>
+<div class="step" data-y="800" data-x="0">
+<h2>死活監視どうするの？</h2>
+
+<p>App::MadEyeがあります！</p>
+
+<p>シンプルなPerl製の死活監視用ツールです。</p>
+
+<p><br></p>
+
+<p>Ping、HTTP、データベース接続、DSN lookup、SMTP、FTP、memcached、etc</p>
+
+<p><br></p>
+
+<p>様々なものに死活監視可能です。</p>
+
+<p>定期的にcronで回す感じになります。</p>
+
+</div>
+<div class="step" data-y="800" data-x="1200">
+<h2>閾値でのアラート？</h2>
+
+<p>Amazon CloudWatchを使いましょう</p>
+
+</div>
+<div class="step" data-y="800" data-x="2400">
+<h2>デモ</h2>
+
+<p>cloudforecast, madeye</p>
+
+<p><br></p>
+
+<p>資料</p>
+
+<p>http://masakyst.github.io/docs/perl-professional-programming/chapterx1/</p>
+
+</div>
+<div class="step" data-y="800" data-x="3600">
+<h2>YAPC::Asia 2013</h2>
+
+<p>http://yapcasia.org/2013/</p>
+
+<p>エンジニアのエンジニアによるエンジニアのためのお祭り!!</p>
+
+<p>国内外の(Perl)ハッカーが集結!!</p>
+
+<p><br></p>
+
+<p>9/19(木) ... 前夜祭</p>
+
+<p>9/20(金) ... 一日目</p>
+
+<p>9/21(土) ... 二日目</p>
+
+<p><br></p>
+
+<p>100セット限定！miyagawaデカール 2013年モデル +完全限定生産なシークレットデカール２枚セット
+http://peatix.com/event/15222　</p>
+
+</div>
+<div class="step" data-y="800" data-x="4800">
+<h2>YAPCに沖縄から安く行く!!</h2>
+
+<h3>例)</h3>
+
+<p>飛行機代</p>
+
+<p>LCCエアアジア </p>
+
+<p>往路 9/18(水): 5,580円</p>
+
+<p>復路 9/22(日): 7,580円</p>
+
+<p>計13,160円</p>
+
+<p><br></p>
+
+<p>ホテル代</p>
+
+<p>ビジネスイン ニューシティー(横浜駅より2駅)</p>
+
+<p>カプセルルーム(29歳以下限定！？</p>
+
+<p>9/19から 1泊1,890円 * 3日 で 合計5,670円</p>
+
+<p><br></p>
+
+<p>他、1泊3000円前後でままある。</p>
+
+<p>※本日調べ、じゃらん調べ</p>
+
+</div>
+<div class="step" data-y="1600" data-x="0">
+<h2>遠方からの参加者支援制度</h2>
+
+<h3>YAPC::Asia参加の交通費をスカイアークさんが全額支援！！</h3>
+
+<p>http://yapcasia.org/2013/06/yapcasia-region.html</p>
+
+<p><br></p>
+
+<p>参加に必要なもの</p>
+
+<p>以下３点が必須となります</p>
+
+<p><br></p>
+
+<ul>
+<li>YAPCに参加したい！という熱い気持ち</li>
+<li>クラウド技術に関連したYAPC::Asiaでのトーク申し込み</li>
+<li>感想などのBlogエントリを書く</li>
+</ul>
+
+<p><br></p>
+
+<p>詳しくは、上記URLを確認ください!!</p>
+
+</div>
+<div class="step" data-y="1600" data-x="1200">
+<h2>YAPCいつ行くの！？</h2>
+
+<p><br></p>
+
+<h2>いまでしょ！！</h2>
+
+<p>(注意9/19です)</p>
+
+</div>
+<div class="step" data-y="1600" data-x="2400">
+<h2>ご清聴</h2>
+
+<h2>ありがとうございました</h2>
+
+</div>
+
+
+    <div id="overview" class="step" data-x="3000" data-y="1500" data-scale="10">
+    </div>
+
+</div>
+
+<div class="hint">
+    <p>Use a spacebar or arrow keys to navigate</p>
+</div>
+<script>
+if ("ontouchstart" in document.documentElement) { 
+    document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+}
+</script>
+<script src="js/impress.js"></script>
+
+</body>
+</html>
+
