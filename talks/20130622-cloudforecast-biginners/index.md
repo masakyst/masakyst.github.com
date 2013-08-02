@@ -3,7 +3,7 @@ Cloudforecast Biginners
 
 <br>
 
-2013/04/27 さいとう まさあき( masakyst )
+2013/06/22 さいとう まさあき( masakyst )
 
 Yomitan.pm
 
