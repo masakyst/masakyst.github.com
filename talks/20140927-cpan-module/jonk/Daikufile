@@ -1,0 +1,21 @@
+
+namespace create => sub {
+    desc 'ジョブキュースキーマ作成';
+    task schema => sub {
+        system "sqlite3 jobqueue.db < schema-sqlite.sql";
+    };
+};
+
+namespace clear => sub {
+    desc 'ログ削除';
+    task 'log' => sub {
+        sh q(rm -rf ./worker_log*); 
+    };
+};
+
+namespace devel => sub {
+    desc '開発ワーカー起動';
+    task 'worker' => sub {
+        sh q(perl -Ilib worker.pl); 
+    };
+};

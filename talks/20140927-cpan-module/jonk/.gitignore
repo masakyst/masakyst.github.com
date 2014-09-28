@@ -1,0 +1,3 @@
+local/
+jobqueue.db
+worker_log*

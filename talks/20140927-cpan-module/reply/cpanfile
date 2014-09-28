@@ -1,0 +1,3 @@
+requires 'Reply';
+requires 'Carp::Reply';
+requires 'perl', 'v5.18.0';

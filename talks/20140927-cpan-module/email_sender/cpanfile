@@ -1,0 +1,3 @@
+requires 'Email::Sender::Simple';
+requires 'Email::Sender::Transport::SMTPS';
+requires 'perl', 'v5.18.0';

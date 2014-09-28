@@ -1,0 +1,6 @@
+requires 'DBI';
+requires 'File::RotateLogs';
+requires 'Jonk::Client';
+requires 'Jonk::Worker';
+requires 'Parallel::Prefork';
+requires 'Time::Piece';

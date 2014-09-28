@@ -1,0 +1,4 @@
+requires 'DBI';
+requires 'DBD::mysql';
+requires 'DBIx::Class::Schema';
+requires 'DBIx::Class::Schema::Loader';
