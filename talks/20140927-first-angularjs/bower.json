@@ -1,0 +1,18 @@
+{
+  "name": "20140927-first-angularjs",
+  "version": "0.0.0",
+  "authors": [
+    "masakyst <masakyst.mobile@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angularjs": "~1.2.25"
+  }
+}
